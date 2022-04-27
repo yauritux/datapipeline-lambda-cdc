@@ -1,0 +1,32 @@
+service: datapipeline-cdc
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: python3.8
+  profile: ${env:PROFILE}
+  region: ${env:REGION}
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "sns:Publish"
+          Resource: ${self:custom.environment.SNS_TOPIC_ARN}
+
+useDotenv: true
+
+plugins:
+  - serverless-python-requirements
+  - serverless-dotenv-plugin
+
+custom:
+  pythonRequirements:
+    usePipenv: true
+  environment:
+    SNS_TOPIC_ARN: ${env:SNS_TOPIC_ARN}
+
+functions:
+  on_append_driver_daily_metrics:
+    handler: handler.on_append_driver_daily_metrics
