@@ -21,6 +21,10 @@ plugins:
   - serverless-python-requirements
   - serverless-dotenv-plugin
 
+package:
+  patterns:
+    - "!sql/**"
+
 custom:
   pythonRequirements:
     usePipenv: true
